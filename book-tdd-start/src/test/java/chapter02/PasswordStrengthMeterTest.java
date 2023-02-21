@@ -8,32 +8,27 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 public class PasswordStrengthMeterTest {
 
+    private PasswordStrengthMeter sut = new PasswordStrengthMeter();
+
     @ValueSource(strings = {"ab12!@AB", "abc1!Add"})
     @ParameterizedTest
     void meetsAllCriteria_Then_Strong(final String password) {
-        final PasswordStrengthMeter sut = new PasswordStrengthMeter();
-
-        PasswordStrength actual = sut.meter(password);
-
-        assertThat(actual).isEqualTo(PasswordStrength.STRONG);
+        assertStrength(password, PasswordStrength.STRONG);
     }
 
     @ValueSource(strings = {"ab12!@A", "Ab12!c"})
     @ParameterizedTest
     void meetsOtherCriteria_except_for_Length_Then_Normal(final String password) {
-        final PasswordStrengthMeter sut = new PasswordStrengthMeter();
-
-        final PasswordStrength actual = sut.meter(password);
-
-        assertThat(actual).isEqualTo(PasswordStrength.NORMAL);
+        assertStrength(password, PasswordStrength.NORMAL);
     }
 
     @Test
     void meetsOtherCriteria_except_for_number_Then_Normal() {
-        final PasswordStrengthMeter sut = new PasswordStrengthMeter();
+        assertStrength("ab!@ABqwer", PasswordStrength.NORMAL);
+    }
 
-        final PasswordStrength actual = sut.meter("ab!@ABqwer");
-
-        assertThat(actual).isEqualTo(PasswordStrength.NORMAL);
+    private void assertStrength(final String password, final PasswordStrength expectedStrength) {
+        final PasswordStrength actual = sut.meter(password);
+        assertThat(actual).isEqualTo(expectedStrength);
     }
 }
