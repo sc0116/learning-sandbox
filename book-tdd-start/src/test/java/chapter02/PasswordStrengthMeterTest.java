@@ -16,4 +16,14 @@ public class PasswordStrengthMeterTest {
 
         assertThat(actual).isEqualTo(PasswordStrength.STRONG);
     }
+
+    @ValueSource(strings = {"ab12!@A", "Ab12!c"})
+    @ParameterizedTest
+    void meetsOtherCriteria_except_for_Length_Then_Normal(final String password) {
+        final PasswordStrengthMeter sut = new PasswordStrengthMeter();
+
+        final PasswordStrength actual = sut.meter(password);
+
+        assertThat(actual).isEqualTo(PasswordStrength.NORMAL);
+    }
 }
