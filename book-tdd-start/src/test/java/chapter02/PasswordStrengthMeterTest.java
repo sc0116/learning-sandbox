@@ -2,6 +2,7 @@ package chapter02;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -23,6 +24,15 @@ public class PasswordStrengthMeterTest {
         final PasswordStrengthMeter sut = new PasswordStrengthMeter();
 
         final PasswordStrength actual = sut.meter(password);
+
+        assertThat(actual).isEqualTo(PasswordStrength.NORMAL);
+    }
+
+    @Test
+    void meetsOtherCriteria_except_for_number_Then_Normal() {
+        final PasswordStrengthMeter sut = new PasswordStrengthMeter();
+
+        final PasswordStrength actual = sut.meter("ab!@ABqwer");
 
         assertThat(actual).isEqualTo(PasswordStrength.NORMAL);
     }
