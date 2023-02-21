@@ -27,6 +27,17 @@ public class PasswordStrengthMeterTest {
         assertStrength("ab!@ABqwer", PasswordStrength.NORMAL);
     }
 
+    @Test
+    void nullInput_Then_Invalid() {
+        assertStrength(null, PasswordStrength.INVALID);
+    }
+
+    @ValueSource(strings = {"", " ", "\t", "\n"})
+    @ParameterizedTest
+    void emptyInput_Then_Invalid(final String password) {
+        assertStrength(password, PasswordStrength.INVALID);
+    }
+
     private void assertStrength(final String password, final PasswordStrength expectedStrength) {
         final PasswordStrength actual = sut.meter(password);
         assertThat(actual).isEqualTo(expectedStrength);

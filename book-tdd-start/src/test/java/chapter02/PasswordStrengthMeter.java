@@ -3,6 +3,10 @@ package chapter02;
 public class PasswordStrengthMeter {
 
     public PasswordStrength meter(final String s) {
+        if (s == null || s.isBlank()) {
+            return PasswordStrength.INVALID;
+        }
+
         if (s.length() < 8) {
             return PasswordStrength.NORMAL;
         }
