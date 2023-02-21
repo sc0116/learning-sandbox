@@ -43,6 +43,11 @@ public class PasswordStrengthMeterTest {
         assertStrength("ab12!@df", PasswordStrength.NORMAL);
     }
 
+    @Test
+    void meetsOnlyLengthCriteria_Then_Weak() {
+        assertStrength("abdefghi", PasswordStrength.WEAK);
+    }
+
     private void assertStrength(final String password, final PasswordStrength expectedStrength) {
         final PasswordStrength actual = sut.meter(password);
         assertThat(actual).isEqualTo(expectedStrength);
