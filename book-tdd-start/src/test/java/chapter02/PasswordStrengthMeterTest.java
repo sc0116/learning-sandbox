@@ -53,6 +53,11 @@ public class PasswordStrengthMeterTest {
         assertStrength("12345", PasswordStrength.WEAK);
     }
 
+    @Test
+    void meetsOnlyUpperCriteria_Then_Weak() {
+        assertStrength("ABZEF", PasswordStrength.WEAK);
+    }
+
     private void assertStrength(final String password, final PasswordStrength expectedStrength) {
         final PasswordStrength actual = sut.meter(password);
         assertThat(actual).isEqualTo(expectedStrength);
