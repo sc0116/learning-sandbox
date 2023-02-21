@@ -38,6 +38,11 @@ public class PasswordStrengthMeterTest {
         assertStrength(password, PasswordStrength.INVALID);
     }
 
+    @Test
+    void meetsOtherCriteria_except_for_Uppercase_Then_Normal() {
+        assertStrength("ab12!@df", PasswordStrength.NORMAL);
+    }
+
     private void assertStrength(final String password, final PasswordStrength expectedStrength) {
         final PasswordStrength actual = sut.meter(password);
         assertThat(actual).isEqualTo(expectedStrength);
