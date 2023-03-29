@@ -18,26 +18,7 @@ public class Customer {
         String result = getName() + " 고객님의 대여 기록\n";
 
         for (final Rental each : rentals) {
-            double thisAmount = 0;
-
-            // 비디오 종류별 대여료 계산
-            switch (each.getMovie().getPriceCode()) {
-                case Movie.REGULAR:
-                    thisAmount += 2;
-                    if (each.getDaysRented() > 2) {
-                        thisAmount += (each.getDaysRented() - 2) * 1.5;
-                    }
-                    break;
-                case Movie.NEW_RELEASE:
-                    thisAmount += each.getDaysRented() * 3;
-                    break;
-                case Movie.CHILDRENS:
-                    thisAmount += 1.5;
-                    if (each.getDaysRented() > 3) {
-                        thisAmount += (each.getDaysRented() - 3) * 1.5;
-                    }
-                    break;
-            }
+            double thisAmount = amountFor(each);
 
             // 적립 포인트를 1 포인트 증가
             frequentRenterPoints++;
@@ -58,6 +39,31 @@ public class Customer {
 
         result += "누적 대여료: " + String.valueOf(totalAmount) + "\n";
         result += "적립 포인트: " + String.valueOf(frequentRenterPoints);
+        return result;
+    }
+
+    private double amountFor(final Rental rental) {
+        double result = 0;
+
+        // 비디오 종류별 대여료 계산
+        switch (rental.getMovie().getPriceCode()) {
+            case Movie.REGULAR:
+                result += 2;
+                if (rental.getDaysRented() > 2) {
+                    result += (rental.getDaysRented() - 2) * 1.5;
+                }
+                break;
+            case Movie.NEW_RELEASE:
+                result += rental.getDaysRented() * 3;
+                break;
+            case Movie.CHILDRENS:
+                result += 1.5;
+                if (rental.getDaysRented() > 3) {
+                    result += (rental.getDaysRented() - 3) * 1.5;
+                }
+                break;
+        }
+
         return result;
     }
 
