@@ -1,3 +1,5 @@
+package basic;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
@@ -18,14 +20,14 @@ public class SlicingTest {
                 new Dish("rice", true, 350, Type.OTHER),
                 new Dish("chicken", false, 400, Type.MEAT),
                 new Dish("french", true, 530, Type.OTHER)
-                );
+        );
     }
 
     @Test
     void 이미_정렬되어_있는_경우_takeWhile_메서드는_프레디케이트가_거짓일_때_반복_장업을_중단한다() {
         /*
         아래 코드는 전체(5번) 반복함
-        final List<Dish> filteredMenu = specialMenu.stream()
+        final List<basic.Dish> filteredMenu = specialMenu.stream()
                 .filter(dish -> dish.getCalories() < 320)
                 .collect(Collectors.toList());
          */

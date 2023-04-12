@@ -1,5 +1,9 @@
+package basic;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
+import basic.Dish;
+import basic.Type;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
