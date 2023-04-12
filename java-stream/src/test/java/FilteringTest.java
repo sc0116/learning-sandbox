@@ -3,9 +3,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class FilteringTest extends SetUp{
+public class FilteringTest {
+
+    private List<Dish> menu;
+
+    @BeforeEach
+    void setUp() {
+        menu = Arrays.asList(
+                new Dish("pork", false, 800, Type.MEAT),
+                new Dish("beef", false, 700, Type.MEAT),
+                new Dish("chicken", false, 400, Type.MEAT),
+                new Dish("french", true, 530, Type.OTHER),
+                new Dish("rice", true, 350, Type.OTHER),
+                new Dish("season fruit", true, 120, Type.OTHER),
+                new Dish("pizza", true, 550, Type.OTHER),
+                new Dish("prawns", false, 300, Type.FISH),
+                new Dish("salmon", false, 450, Type.FISH)
+        );
+    }
 
     @Test
     void filter_메서드는_프레디케이트를_인수로_받아서_프레디케이트와_일치하는_모든_요소를_포함하는_스트림을_반환한다() {
