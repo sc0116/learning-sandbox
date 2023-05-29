@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import learning.springevents.common.event.Events;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,8 @@ public class Order {
         verifyNotYetShipped();
         this.state = OrderState.CANCELED;
         System.out.println("주문 취소 완료!");
+
+        Events.raise(new OrderCanceledEvent(getId()));
     }
 
     private void verifyNotYetShipped() {
