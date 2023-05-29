@@ -1,6 +1,8 @@
 package learning.springevents.order.domain;
 
-public class OrderCanceledEvent {
+import learning.springevents.common.event.Event;
+
+public class OrderCanceledEvent extends Event {
 
     private final Long orderNumber;
 
