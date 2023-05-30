@@ -14,7 +14,7 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public synchronized void purchase(final Long id, final Long quantity) {
+    public void purchase(final Long id, final Long quantity) {
         final Product foundProduct = getProduct(id);
         foundProduct.decrease(quantity);
     }

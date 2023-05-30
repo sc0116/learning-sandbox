@@ -15,7 +15,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ProductServiceTest {
 
     @Autowired
-    private ProductService sut;
+    private SynchronizedProductService sut;
+
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private ProductRepository productRepository;
