@@ -15,12 +15,12 @@ public class ProductService {
 
     @Transactional
     public void purchase(final Long id, final Long quantity) {
-        final Product foundProduct = getProduct(id);
+        final Product foundProduct = getProductWithPessimisticLock(id);
         foundProduct.decrease(quantity);
     }
 
-    private Product getProduct(final Long id) {
-        return productRepository.findById(id)
+    private Product getProductWithPessimisticLock(final Long id) {
+        return productRepository.findByIdForUpdate(id)
                 .orElseThrow(NoSuchElementException::new);
     }
 }
