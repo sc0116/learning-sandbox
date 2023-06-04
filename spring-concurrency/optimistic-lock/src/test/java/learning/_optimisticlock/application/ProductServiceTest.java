@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ProductServiceTest {
 
     @Autowired
-    private ProductService sut;
+    private OptimisticLockProductFacade sut;
 
     @Autowired
     private ProductRepository productRepository;
@@ -38,6 +38,8 @@ class ProductServiceTest {
     private void process(final Product product, final CountDownLatch countDownLatch) {
         try {
             sut.purchase(product.getId(), 1L);
+        } catch (final InterruptedException e) {
+            throw new RuntimeException(e);
         } finally {
             countDownLatch.countDown();
         }
