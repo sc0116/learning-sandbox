@@ -30,6 +30,29 @@ public class OrElseAndOrElseGetTest {
         }
     }
 
+    @DisplayName("orElseGet()은 null 일 때만 동작한다.")
+    @Nested
+    class OrElseGetTest {
+
+        @DisplayName("orElseGet()의 값이 null 값이 아닌 경우")
+        @Test
+        void testOrElseGet_notNull() {
+            final StringBuilder sb = new StringBuilder("짱구");
+            final StringBuilder actual = Optional.of(sb).orElseGet(() -> testMethod(sb));
+
+            assertThat(actual.toString()).isEqualTo("짱구");
+        }
+
+        @DisplayName("orElseGet()의 값이 null 값인 경우")
+        @Test
+        void testOrElseGet_null() {
+            final StringBuilder sb = new StringBuilder("짱구");
+            final Object actual = Optional.ofNullable(null).orElseGet(() -> testMethod(sb));
+
+            assertThat(String.valueOf(actual)).isEqualTo("짱구 흰둥이");
+        }
+    }
+
     private StringBuilder testMethod(final StringBuilder sb) {
         System.out.println("메서드 실행 여부 확인 용도 출력문");
         return sb.append(" 흰둥이");
