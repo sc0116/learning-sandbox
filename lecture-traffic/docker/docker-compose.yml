@@ -1,0 +1,16 @@
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: onion-root-password
+      MYSQL_DATABASE: onion-db
+      MYSQL_USER: onion-user
+      MYSQL_PASSWORD: onion-password
+    ports:
+      - "33306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: always
+
+volumes:
+  mysql_data:
