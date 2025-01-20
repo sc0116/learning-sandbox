@@ -4,6 +4,8 @@ import com.onion.backend.entity.User;
 import com.onion.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,5 +27,14 @@ public class UserController {
 		final User user = userService.create(username, password, email);
 
 		return ResponseEntity.ok(user);
+	}
+
+	@DeleteMapping("/{userId}")
+	public ResponseEntity<Void> delete(
+		@PathVariable final Long userId
+	) {
+		userService.delete(userId);
+
+		return ResponseEntity.noContent().build();
 	}
 }
