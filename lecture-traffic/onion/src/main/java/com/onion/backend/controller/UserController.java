@@ -4,6 +4,8 @@ import com.onion.backend.dto.SignUpUser;
 import com.onion.backend.entity.User;
 import com.onion.backend.jwt.JwtUtil;
 import com.onion.backend.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,12 +45,36 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public String login(@RequestParam final String username, @RequestParam final String password) throws AuthenticationException {
+	public String login(
+		@RequestParam final String username,
+		@RequestParam final String password,
+		final HttpServletResponse response
+	) throws AuthenticationException {
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
 		final UserDetails userDetails = userDetailService.loadUserByUsername(username);
 
-		return jwtUtil.generateToken(userDetails.getUsername());
+		final String token = jwtUtil.generateToken(userDetails.getUsername());
+
+		final Cookie cookie = new Cookie("onion_token", token);
+		cookie.setHttpOnly(true);
+		cookie.setSecure(true);
+		cookie.setPath("/");
+		cookie.setMaxAge(60 * 60);
+
+		response.addCookie(cookie);
+
+		return token;
+	}
+
+	@PostMapping("/logout")
+	public void logout(final HttpServletResponse response) {
+		final Cookie cookie = new Cookie("onion_token", null);
+		cookie.setHttpOnly(true);
+		cookie.setPath("/");
+		cookie.setMaxAge(0);
+
+		response.addCookie(cookie);
 	}
 
 	@PostMapping("/token/validation")
