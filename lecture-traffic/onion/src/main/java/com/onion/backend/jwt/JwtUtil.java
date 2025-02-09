@@ -43,6 +43,12 @@ public class JwtUtil {
 			.getSubject();
 	}
 
+	public Date getExpirationDateFromToken(final String token) {
+		return getJwtParser().parseClaimsJws(token)
+			.getBody()
+			.getExpiration();
+	}
+
 	private JwtParser getJwtParser() {
 		return Jwts.parserBuilder()
 			.setSigningKey(SECRET_KEY)

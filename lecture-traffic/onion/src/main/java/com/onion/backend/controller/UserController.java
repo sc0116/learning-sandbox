@@ -3,10 +3,14 @@ package com.onion.backend.controller;
 import com.onion.backend.dto.SignUpUser;
 import com.onion.backend.entity.User;
 import com.onion.backend.jwt.JwtUtil;
+import com.onion.backend.service.JwtBlacklistService;
 import com.onion.backend.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +39,7 @@ public class UserController {
 	private final UserDetailsService userDetailService;
 	private final AuthenticationManager authenticationManager;
 	private final JwtUtil jwtUtil;
+	private final JwtBlacklistService jwtBlacklistService;
 
 	@PostMapping("/sign-up")
 	public ResponseEntity<User> create(
@@ -68,7 +74,29 @@ public class UserController {
 	}
 
 	@PostMapping("/logout")
-	public void logout(final HttpServletResponse response) {
+	public void logout(
+		final HttpServletResponse response
+	) {
+		final Cookie cookie = new Cookie("onion_token", null);
+		cookie.setHttpOnly(true);
+		cookie.setPath("/");
+		cookie.setMaxAge(0);
+
+		response.addCookie(cookie);
+	}
+
+	@PostMapping("/logout/all")
+	public void logout(
+		@RequestParam(required = false, name = "token") final String requestToken,
+		@CookieValue("onion_token") final String cookieToken,
+		final HttpServletResponse response
+	) {
+		final String token = Objects.nonNull(requestToken) ? requestToken : cookieToken;
+		final String username = jwtUtil.getUsernameFromToken(token);
+		final LocalDateTime expirationTime = LocalDateTime.now();
+
+		jwtBlacklistService.blacklistToken(username, token, expirationTime);
+
 		final Cookie cookie = new Cookie("onion_token", null);
 		cookie.setHttpOnly(true);
 		cookie.setPath("/");
