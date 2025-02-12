@@ -3,6 +3,7 @@ package com.onion.backend.config;
 import com.onion.backend.jwt.JwtAuthenticationFilter;
 import com.onion.backend.jwt.JwtUtil;
 import com.onion.backend.service.CustomUserDetailsService;
+import com.onion.backend.service.JwtBlacklistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,9 @@ public class SecurityConfig {
 	@Autowired
 	private JwtUtil jwtUtil;
 
+	@Autowired
+	private JwtBlacklistService jwtBlacklistService;
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable)
@@ -39,7 +43,7 @@ public class SecurityConfig {
 					.anyRequest()
 					.authenticated()
 			)
-			.addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailService), UsernamePasswordAuthenticationFilter.class);
+			.addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailService, jwtBlacklistService), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
