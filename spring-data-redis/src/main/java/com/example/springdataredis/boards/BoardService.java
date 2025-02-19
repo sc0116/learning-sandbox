@@ -1,6 +1,7 @@
 package com.example.springdataredis.boards;
 
 import java.util.List;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,11 @@ public class BoardService {
 		this.boardRepository = boardRepository;
 	}
 
+	@Cacheable(
+		cacheNames = "getBoards",
+		key = "'boards:page:' + #page + ':size:' + #size",
+		cacheManager = "boardCacheManager"
+	)
 	public List<Board> findBoards(final int page, final int size) {
 		final Pageable pageable = PageRequest.of(page - 1, size);
 
