@@ -1,28 +1,31 @@
 package learning.basic.user;
 
-import java.util.Collection;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
+
 @RequiredArgsConstructor
 public class User implements UserDetails {
 
-	private final UserEntity userEntity;
+	private final String username;
+	private final String password;
+	private final String authority;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(userEntity::getAuthority);
+		return List.of(() -> authority);
 	}
 
 	@Override
 	public String getPassword() {
-		return userEntity.getPassword();
+		return password;
 	}
 
 	@Override
 	public String getUsername() {
-		return userEntity.getUsername();
+		return username;
 	}
 }
