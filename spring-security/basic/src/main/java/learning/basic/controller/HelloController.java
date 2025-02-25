@@ -1,13 +1,22 @@
 package learning.basic.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequiredArgsConstructor
 @RestController
 public class HelloController {
 
 	@GetMapping("/api/v1/hello")
 	public String hello() {
 		return "Hello, Spring Security";
+	}
+
+	@PostMapping("/api/v1/hello")
+	public String hello(@RequestBody final HelloRequestBody request) {
+		return request.getPassword();
 	}
 }
